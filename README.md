@@ -2,19 +2,28 @@
 
 ## Presentation
 
-Our presentation can be found {here}(https://1drv.ms/p/s!AhmabPzKf3o1hbgXwCDZUexX_k4nCg?e=cwiiCY)
+Our presentation can be found here: (https://1drv.ms/p/s!AhmabPzKf3o1hbgXwCDZUexX_k4nCg?e=cwiiCY)
 
 ## Team: Qurnalism
 
 Nils, Stefan, Paul, Tobias
 
+## Motivation
+
+As international tensions get real, it is becoming more important to be able to send encrypted messages. Imagine an
+Journalist, how wants to send a very dilicate article to his or her publisher. The article might be of as much
+importance, that no one than the publisher should read the article. And for that, quantum key exchange can become
+usable. If quantum networks, as for example the European Quantum Network form Delft, become more wide spread, such that
+the reporter can access such a network, the communication and key exchange using Quantum Technologies can become
+reality. In this work, we investigated in how far such a communication protocol can be realized. For that we used the
+Quantum Inspire platform
+
 ## Abstract
 
-Secure messaging is important in multiple sectors. With the rise of quantum computers, the only way to ensure fully
-encrypted messaging is to use Quantum Key Distribution. Our library implements a modified version of the BB84 protocol
-on a Quantum Inspire system. It also offers the framework for two parties to connect to our interface and exchange
-messages. We also included a quantum-based random number generator for truly random numbers and a quantum-secure error
-check by comparison of two hash-functions.
+With the rise of quantum computers, one way to ensure fully encrypted messaging is to use Quantum Key Distribution. Our
+library implements a modified version of the BB84 protocol on a Quantum Inspire system. It also offers the framework for
+two parties to connect to our interface and exchange messages. We also included a quantum-based random number generator
+for truly random numbers and a quantum-secure error check by comparison of two hash-functions.
 
 ## Structure of the repository
 
@@ -46,8 +55,9 @@ repeated several times to generate different bitstrings for the key and basis fo
 version of the BB84 protocol, both participants of the conversation encode a key which is sent to the other. This
 doubles the length of the output key, with only generating 4/3 as many random numbers. Since in a practical application
 photons would be exchanged, our
-"mirrored" version of BB84 does not increase the runtime significantly. With the algorithm, two private keys are
-generated and merged.
+"mirrored" version of BB84 does not increase the runtime significantly. With the algorithm, the two private keys that
+were generated are merged into a combined key. The original version of the BB84 protocol is also included as an option,
+which may be more useful if one agent does not have the capability to prepare quantum states, but only read them.
 
 The resulting keys can be compared publicly using a quantum-safe hash function such as sha3-512. If they match, the key
 exchange was successful, if they do not match, an error occurred (most likely) in the quantum algorithm, so a re-run is
