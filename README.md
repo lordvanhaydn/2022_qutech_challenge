@@ -1,23 +1,72 @@
-# QuTech Challenges @ MIT iQuHACK 2022
+# iQuHack 2022: Quantum Key Distribution Library
 
-<p align="left">
-  <a href="https://qutech.nl" target="_blank"><img src="https://user-images.githubusercontent.com/10100490/151484481-7cedb7da-603e-43cc-890c-979fb66aeb60.png" width="25%" style="padding-right: 0%"/></a>
-  <a href="https://iquhack.mit.edu/" target="_blank"><img src="https://user-images.githubusercontent.com/10100490/151647370-d161d5b5-119c-4db9-898e-cfb1745a8310.png" width="10%" style="padding-left: 0%"/> </a>
-</p>
+## Presentation
 
+Our presentation can be found {here}(https://1drv.ms/p/s!AhmabPzKf3o1hbgXwCDZUexX_k4nCg?e=cwiiCY)
 
-## Description 
+## Team: Qurnalism
 
-For the 2022 edition of the iQuHack (interdisciplinary Quantum HACKathon), [QuTech](https://qutech.nl) has partnered with the team at MIT to propose 2 challenges, hosted in our own multi-hardware Quantum Technology platform, [Quantum Inspire](https://www.quantum-inspire.com). These aim to draw participants to the challenges at the heart of our mission: to develop scalable prototypes of a quantum computer and an inherently safe quantum internet, based on the fundamental laws of quantum mechanics.
+Nils, Stefan, Paul, Tobias
 
-To qualify for the QuTech Division Challenge, participants should submit a project that addresses either the proposed Quantum Error Correction (QEC) challenge or the Quantum Key Distribution (QKD) challenge. Detailed descriptions of these two challenges and their goals are available in the documents linked below (hosted in this repository):
+## Abstract
 
-- [Quantum Error Correction Challenge](https://github.com/iQuHACK/2022_qutech_challenge/blob/main/QuantumErrorCorrectionChallenge.pdf)
-- [Quantum Key Distribution Challenge](https://github.com/iQuHACK/2022_qutech_challenge/blob/main/QuantumKeyDistrubutionChallenge.pdf)
+Secure messaging is important in multiple sectors. With the rise of quantum computers, the only way to ensure fully
+encrypted messaging is to use Quantum Key Distribution. Our library implements a modified version of the BB84 protocol
+on a Quantum Inspire system. It also offers the framework for two parties to connect to our interface and exchange
+messages. We also included a quantum-based random number generator for truly random numbers and a quantum-secure error
+check by comparison of two hash-functions.
 
+## Structure of the repository
 
-## Scoring and Submission
+- src.quantum
+  - CircuitExecutor: Helper class to execute a cirquit on real hardware or emulator
+  - Circuits: Circuits are encoded as static methods here
+  - EncryptionProtocol: Protocol definition by config
+  - ExecutionPipeline: Executes a circuit multiple times from a buffer
+- src.simulation
+  - Agent: Basic object of an agent (e.g. Alice, Bob)
+  - KeyInterface: Interface which simulates the exchange in a quantum internet
+  - Simulation: Simulation environment to test agents
+- src.utils
+  - RandomGenerator: Generates random number, can also use the quantum computer
+  - Utils: Utilities to merge keys e.g.
+- src.workbench
+  - Scripts to test the framework. Have a look into test_setup for the basic usage of the simulation environment
 
-**Rubric:** https://docs.google.com/document/u/1/d/e/2PACX-1vR5PVoInN_Fi42lIOchhblgGBPblgNyouj1XHukonZ4sdqY-p5ulS9TxdzvddEcDNFc5k_6teFyKzXv/pub
+## Details About the Implementation
 
-**Submission:** Please visit https://iquhack.mit.edu/ for details on how to submit your project.
+The classical communication was implemented in python while the quantum information channels were implemented with cQASM
+and run on the Quantum inspire platform.
+
+First of all, both Alice and Bob use the Quantum Inspire system to generate random numbers. This can be done by applying
+a Hadamard Gate on a qubit in 0 state and measuring the qubit in the z basis, which will give us a completely random
+result of either 0 or 1. Alternatively, A classical random number generator can be used. We offer both options that can
+be chosen depending on preferences of the user/availability of the quantum hardware. This random number generation is
+repeated several times to generate different bitstrings for the key and basis for each Alice and Bob. In our modified
+version of the BB84 protocol, both participants of the conversation encode a key which is sent to the other. This
+doubles the length of the output key, with only generating 4/3 as many random numbers. Since in a practical application
+photons would be exchanged, our
+"mirrored" version of BB84 does not increase the runtime significantly. With the algorithm, two private keys are
+generated and merged.
+
+The resulting keys can be compared publicly using a quantum-safe hash function such as sha3-512. If they match, the key
+exchange was successful, if they do not match, an error occurred (most likely) in the quantum algorithm, so a re-run is
+necessary, which our code handles automatically, up to 10 tries.
+
+Once the key hash functions match, a secure connection can be established. We used a symmetric XOR encryption of the
+message with an elongated key. The receiving party can then decrypt the message using the same XOR function.
+
+This procedure can be used in any data transfer application, from email to messenger app, as long as a series of qubits
+can be exchanged between the communicating parties. Our journalist can now transmit the critical insider information
+safely.
+
+## Our personal experience
+
+We all really enjoyed the event and had a lot of fun coding together and discussing concepts of quantum technology.
+Besides learning hard skills like Quantum Key Distribution, we also learned how to properly set up and manage a
+collaborative project. It was an enrichment to work in a team with members in multiple countries, so that iQuHack 2022
+let us grow not only as researchers but also as a team.
+
+## Date
+
+January 30, 2022
